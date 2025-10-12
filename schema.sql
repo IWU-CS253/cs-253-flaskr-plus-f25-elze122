@@ -3,5 +3,5 @@ create table entries (
   id integer primary key autoincrement,
   title text not null,
   'text' text not null,
-  category text
+  category text not null
 );

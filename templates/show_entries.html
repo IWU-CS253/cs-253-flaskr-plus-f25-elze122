@@ -12,8 +12,18 @@
     </dl>
   </form>
   <ul class="entries">
+  <form action="{{ url_for('show_entries') }}" method="get">
+      <input name="filter" list="categories" placeholder="Category">
+      <datalist id="categories">
+          {% for entry in entries %}
+            <option value="{{ entry.category }}">
+          {% endfor %}
+      </datalist>
+      <button type="submit">Filter</button>
+      <a href="{{ url_for('show_entries') }}"><button type="button">Reset</button></a>
+  </form>
   {% for entry in entries %}
-    <li><h2>{{ entry.title }}</h2><h5>{{ entry.category }}</h5>{{ entry.text|safe }}</li>
+    <li><h2>{{ entry.title }}</h2><h4>{{ entry.category }}</h4>{{ entry.text|safe }}</li>
     <li><form action="/delete_entry" method="post">
         <input name="id" type="hidden" value="{{ entry.id }}">
         <button type="submit">Delete</button>

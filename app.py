@@ -64,11 +64,18 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def show_entries():
+    filter = request.args.get('filter', None)
     db = get_db()
-    cur = db.execute('select id, title, category, text from entries order by id desc')
-    entries = cur.fetchall()
+
+    if filter:
+        cur = db.execute('SELECT id, title, category, text FROM entries where CATEGORY=?', (filter,))
+        entries = cur.fetchall()
+
+    else:
+        cur = db.execute('select id, title, category, text from entries order by id desc')
+        entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
 
@@ -86,7 +93,7 @@ def delete_entry():
     entry_id = request.form.get('id')
     if entry_id:
         db = get_db()
-        db.execute('DELETE FROM entries WHERE id=?', entry_id)
+        db.execute('DELETE FROM entries WHERE id=?', (entry_id,))
         db.commit()
 
         flash('Entry was successfully deleted')
