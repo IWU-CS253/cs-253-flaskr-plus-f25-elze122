@@ -80,3 +80,14 @@ def add_entry():
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
+
+@app.route('/delete_entry', methods=['POST'])
+def delete_entry():
+    title = request.form.get('title')
+    if title:
+        db = get_db()
+        db.execute('DELETE FROM entries WHERE title=?', (title,))
+        db.commit()
+
+        flash('Entry was successfully deleted')
+    return redirect(url_for('show_entries'))
