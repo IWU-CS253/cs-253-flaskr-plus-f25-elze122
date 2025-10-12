@@ -20,7 +20,7 @@
           {% endfor %}
       </datalist>
       <button type="submit">Filter</button>
-      <a href="{{ url_for('show_entries') }}"><button type="button">Reset</button></a>
+      <a href="{{ url_for('show_entries') }}"><button type="button">Reset Filters</button></a>
   </form>
   {% for entry in entries %}
     <li><h2>{{ entry.title }}</h2><h4>{{ entry.category }}</h4>{{ entry.text|safe }}</li>
