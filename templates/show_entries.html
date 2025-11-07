@@ -24,10 +24,16 @@
   </form>
   {% for entry in entries %}
     <li><h2>{{ entry.title }}</h2><h4>{{ entry.category }}</h4>{{ entry.text|safe }}</li>
-    <li><form action="/delete_entry" method="post">
+    <li>
+        <form action="/delete_entry" method="post">
         <input name="id" type="hidden" value="{{ entry.id }}">
         <button type="submit">Delete</button>
-    </form></li>
+        </form>
+        <form action="/editing" method="post">
+        <input name="id" type="hidden" value="{{ entry.id }}">
+        <button type="submit">Edit</button>
+        </form>
+    </li>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>
   {% endfor %}

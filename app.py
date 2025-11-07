@@ -98,3 +98,22 @@ def delete_entry():
 
         flash('Entry was successfully deleted')
     return redirect(url_for('show_entries'))
+
+
+@app.route('/editing', methods=['POST'])
+def editing():
+    entry_id = request.form.get('id')
+    db = get_db()
+    cur = db.execute('SELECT id, title, category, text FROM entries WHERE id=?', (entry_id,))
+    entry = cur.fetchone()
+
+    return render_template('edit_entries.html', entry=entry)
+
+@app.route('/edit_entry', methods=['POST'])
+def edit_entry():
+    db = get_db()
+    db.execute('UPDATE entries SET (title, category, text) = (?, ?, ?) WHERE id=?',
+               [request.form['title'], request.form['category'], request.form['text'], request.form['id']])
+    db.commit()
+    flash('Entry was successfully updated')
+    return redirect(url_for('show_entries'))
