@@ -1,41 +1,68 @@
 {% extends "layout.html" %}
 {% block body %}
   <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
-    <dl>
-      <dt>Title:
-      <dd><input type="text" size="30" name="title">
-      <dt>Category:
-      <dd><input type="text" size="30" name="category">
-      <dt>Text:
-      <dd><textarea name="text" rows="5" cols="40"></textarea>
-      <dd><input type="submit" value="Share">
-    </dl>
+    <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control border border2" id="title" name="title">
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category:</label>
+        <input type="text" class="form-control border border2" id="category" name="category">
+    </div>
+    <div class="mb-3">
+        <label for="text" class="form-label">Text:</label>
+        <textarea class="form-control border border2" id="text" name="text" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Submit</button>
   </form>
-  <ul class="entries">
   <form action="{{ url_for('show_entries') }}" method="get">
-      <input name="filter" list="categories" placeholder="Category">
+  <div class="row g-2 mb-3">
+  <div class="col-auto">
+      <input name="filter" list="categories" placeholder="Category" class="form-control">
       <datalist id="categories">
           {% for entry in entries %}
             <option value="{{ entry.category }}">
           {% endfor %}
       </datalist>
-      <button type="submit">Filter</button>
-      <a href="{{ url_for('show_entries') }}"><button type="button">Reset Filters</button></a>
+  </div>
+  <div class="col-auto">
+      <button type="submit" class="btn btn-secondary">Filter</button>
+  </div>
+  <div class="col-auto">
+      <a href="{{ url_for('show_entries') }}" class="btn btn-secondary">Reset Filters</a>
+  </div>
   </form>
   {% for entry in entries %}
-    <li><h2>{{ entry.title }}</h2><h4>{{ entry.category }}</h4>{{ entry.text|safe }}</li>
-    <li>
-        <form action="/delete_entry" method="post">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row align-items-center">
+        <div class="col-md-4">
+            <h2>{{ entry.title }}</h2>
+        </div>
+        <div class="col-md-3">
+            <h4>{{ entry.category }}</h4>
+        </div>
+      <div class="col-md-5 text-md-end">
+        <form action="/editing" method="post" class="d-inline">
         <input name="id" type="hidden" value="{{ entry.id }}">
-        <button type="submit">Delete</button>
+        <button type="submit" class="btn btn-dark">Edit</button>
         </form>
-        <form action="/editing" method="post">
+        <form action="/delete_entry" method="post" class="d-inline">
         <input name="id" type="hidden" value="{{ entry.id }}">
-        <button type="submit">Edit</button>
+        <button type="submit" class="btn btn-dark">Delete</button>
         </form>
-    </li>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+            {{ entry.text|safe }}
+        </div>
+      </div>
+      </div>
+    </div>
   {% else %}
-    <li><em>Unbelievable.  No entries here so far</em></li>
+    <div class="alert alert-secondary">
+      <em>Unbelievable.  No entries here so far</em>
+    </div>
   {% endfor %}
-  </ul>
 {% endblock %}
